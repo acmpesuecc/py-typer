@@ -1,9 +1,9 @@
-# Copyright (C) 2023
-# author: PES2UG23CSXXX 
-# author: PES2UG23CSXXX 
-# author: PES2UG23CSXXX 
-# author: PES2UG23CSXXX 
+# author: PES2UG23CS368 Nathan Matthew Paul
+# author: PES2UG23CS3XX Navneet Nayak
+# author: PES2UG23CS3XX Nevin Mathew Thomas
+# author: PES2UG23CS3XX Nilay Srivastava
 # SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2023
 
 # import stuff
 import tkinter as tk

@@ -1,12 +1,12 @@
-# UE23CS151A mini-project
+# UE23CS151A speedtyping-test
 
 ``` text
-> Python mini-project: <insert topic-name here>
+> python mini-project: speedtyping-test
 ```
 
 ## problem statement:
 
-Writeup about the mini-project and the problem it tries to solve.
+Writeup about the speedtyping-test and the problem it tries to solve.
 
 ## features:
 
@@ -26,11 +26,11 @@ Writeup about the mini-project and the problem it tries to solve.
 [![license: GPLv3 or Later](https://polarhive.net/assets/badges/gpl-3.svg)](https://www.gnu.org/licenses/gpl-3.0.txt)
 
 ```
-<mini-project> is licensed under the GPLv3
-Copyright © 2023, <mini-project> authors:
+Copyright © 2023: <speedtyping-test authors>
+Licensed under the GPLv3.0
 
-Nathan Matthew Paul
-Navneet Nayak
-Nevin Mathew Thomas
-Nilay Srivastava
+PES2UG23CS368 Nathan Matthew Paul
+PES2UG23CS3XX Navneet Nayak
+PES2UG23CS3XX Nevin Mathew Thomas
+PES2UG23CS3XX Nilay Srivastava
 ```
