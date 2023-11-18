@@ -1,6 +1,6 @@
 # author: PES2UG23CS368 Nathan Matthew Paul
-# author: PES2UG23CS3XX Navneet Nayak
-# author: PES2UG23CS3XX Nevin Mathew Thomas
+# author: PES2UG23CS371 Navneet Nayak
+# author: I am a loser Nevin Mathew Thomas
 # author: PES2UG23CS390 Nilay Srivastava
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
