@@ -50,7 +50,7 @@ def click():
     update_timer()
 
 bt1 = tk.Button(root,text="Start timer", bg='light blue', fg='green',command=click)
-bt1.place()
+bt1.pack()
 
 # capture the keys
 root.bind('<KeyPress>', sendKeys)
