@@ -32,5 +32,5 @@ Licensed under the GPLv3.0
 PES2UG23CS368 Nathan Matthew Paul
 PES2UG23CS371 Navneet Nayak
 I am a loser Nevin Mathew Thomas
-PES2UG23CS3XX Nilay Srivastava
+PES2UG23CS390 Nilay Srivastava
 ```
