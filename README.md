@@ -10,16 +10,14 @@ Writeup about the speedtyping-test and the problem it tries to solve.
 
 ## features:
 
-01. feature
-02. feature
-03. feature
-04. feature
-05. feature
-06. feature
-07. feature
-08. feature
-09. feature
-10. feature
+01. WPM:
+02. Accuracy:
+03. Modes of Difficulty:
+04. Modes of types of text: 
+05. Freestyle modes (random modes):
+06. Sounds feedback for keypresses:
+07. Graph to map out progress:
+08. Modes of total time:
 
 ## credits:
 
