@@ -30,6 +30,28 @@ text_widget = tk.Text(root, wrap=tk.WORD, height=5, width=40)
 text_widget.pack()
 text_widget.insert('1.0', para[0])
 
+# Timer
+seconds_left=60
+def update_timer():
+    global seconds_left
+
+    if seconds_left > 0:
+        seconds_left -= 1
+        timer_label.config(text=f"Time left: {seconds_left} seconds")
+        root.after(1000, update_timer)
+    else:
+        timer_label.config(text="Time's up!")
+
+timer_label = tk.Label(root, text=f"Time left: {seconds_left} seconds",)
+timer_label.pack()
+def click():
+    global seconds_left
+    seconds_left = 60
+    update_timer()
+
+bt1 = tk.Button(root,text="Start timer", bg='light blue', fg='green',command=click)
+bt1.place()
+
 # capture the keys
 root.bind('<KeyPress>', sendKeys)
 root.mainloop()
