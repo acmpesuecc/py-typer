@@ -10,14 +10,14 @@ Writeup about the speedtyping-test and the problem it tries to solve.
 
 ## features:
 
-01. WPM:
-02. Accuracy:
-03. Modes of Difficulty:
-04. Modes of types of text: 
-05. Freestyle modes (random modes):
-06. Sounds feedback for keypresses:
-07. Graph to map out progress:
-08. Modes of total time:
+01. WPM: Nilay
+02. Accuracy: Nathan
+03. Modes of Difficulty: Nevin
+04. Modes of total time: Navneet
+05. Freestyle mode (random words): Nathan
+06. Modes of types of text: Nilay
+07. Sounds feedback for keypresses: Nevin
+08. Graph to map out progress: Navneet
 
 ## credits:
 
@@ -29,6 +29,6 @@ Licensed under the GPLv3.0
 
 PES2UG23CS368 Nathan Matthew Paul
 PES2UG23CS371 Navneet Nayak
-I am a loser Nevin Mathew Thomas
+PES2UG23CS3XX Nevin Mathew Thomas
 PES2UG23CS390 Nilay Srivastava
 ```
