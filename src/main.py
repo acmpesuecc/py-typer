@@ -46,6 +46,7 @@ timer_label = tk.Label(root, text=f"Time left: {seconds_left} seconds",)
 timer_label.pack()
 def click():
     global seconds_left
+    bt1.config(state="disabled")
     seconds_left = 60
     update_timer()
 
