@@ -13,17 +13,33 @@ root = tk.Tk()
 root.title('Typing Speed Test')
 root.geometry('900x600')
 
-# functions
-def sendKeys(event):
-    try:
-        print(event.char)
-    except tk.TclError:
-        pass
-
 # paragraph text
 para = [
-    "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
+    "First word last word"
 ]
+
+current_word = 0
+current_char = 0
+
+print(list(para[current_word]))
+print("next expected character:", para[current_word][current_char])
+
+def sendKeys(event):
+    global current_word, current_char
+
+    typed_char = event.char
+    expected_char = para[current_word][current_char]
+
+    if typed_char == expected_char:
+        current_char += 1
+        print("next expected character:", para[current_word][current_char])
+        if current_char >= len(para[current_word]):
+            current_word += 1
+            current_char = 0
+            print(para[current_word])
+            if current_word >= len(para):
+                text_widget.config(state=tk.DISABLED)
+                return
 
 # display the paragraph
 text_widget = tk.Text(root, wrap=tk.WORD, height=5, width=40)
