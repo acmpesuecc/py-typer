@@ -12,6 +12,8 @@ import tkinter as tk
 root = tk.Tk()
 root.title('Typing Speed Test')
 root.geometry('900x600')
+root.option_add("*Label.Font", "monospace")
+root.option_add("*Button.Font", "monospace")
 
 # paragraph text
 para = [
@@ -42,9 +44,10 @@ def sendKeys(event):
                 return
 
 # display the paragraph
+
 text_widget = tk.Text(root, wrap=tk.WORD, height=5, width=40)
-text_widget.pack()
 text_widget.insert('1.0', para[0])
+text_widget.config(state=tk.DISABLED)
 
 # Timer
 seconds_left=60
@@ -59,14 +62,16 @@ def update_timer():
         timer_label.config(text="Time's up!")
 
 timer_label = tk.Label(root, text=f"Time left: {seconds_left} seconds",)
-timer_label.pack()
 def click():
     global seconds_left
     bt1.config(state="disabled")
     seconds_left = 60
     update_timer()
-
 bt1 = tk.Button(root,text="Start timer", bg='light blue', fg='green',command=click)
+
+# pack stuff
+timer_label.pack()
+text_widget.pack()
 bt1.pack()
 
 # capture the keys
