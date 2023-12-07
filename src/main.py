@@ -5,88 +5,144 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
 
-# import stuff
-import tkinter as tk
+from tkinter import *
+import random
+import time
 
-# setup
-root = tk.Tk()
-root.title('Typing Speed Test')
-root.geometry('900x600')
-root.option_add("*Label.Font", "monospace")
-root.option_add("*Button.Font", "monospace")
-typed_widget = tk.Text(root, wrap=tk.WORD, height=5, width=40)
-typed_widget.config(state=tk.DISABLED)
+class Window:
 
-# paragraph text
-para = [
-    "First word last word"
-]
+    def __init__(self):
+        self.window = Tk()
+        self.window.configure(background="gray25")
+        self.window.geometry("720x480")
+        self.window.resizable(False, False)
+        self.setup()
 
-current_word = 0
-current_char = 0
+    def setup(self):
 
-print(list(para[current_word]))
-print("next expected character:", para[current_word][current_char])
-typed_widget.config(state=tk.NORMAL)
-typed_widget.insert('1.0', para[current_word][current_char])
-typed_widget.config(state=tk.DISABLED)
+        self.misspelled = 0
+        self.spelled = 1
+        self.total_time = 41
+        self.accuracy = 0
+        self.wpm = 0
+        self.write_able = True
+        self.cursor_blink = True
 
-def sendKeys(event):
-    global current_word, current_char
+        self.type_time = self.total_time - 1
 
-    typed_char = event.char
-    expected_char = para[current_word][current_char]
+        text = "python is python is python is python is python is python is python is"
+        text_freestyle = ""
+        text_harder = ""
 
-    if typed_char == expected_char:
-        if typed_char==para[0][0]: click()
-        current_char += 1
-        print("next expected character:", para[current_word][current_char])
-        typed_widget.delete('1.0')
-        typed_widget.config(state=tk.NORMAL)
-        typed_widget.insert('1.0', para[current_word][current_char])
-        typed_widget.config(state=tk.DISABLED)
-        if current_char >= len(para[current_word]):
-            current_word += 1
-            current_char = 0
-            typed_widget.delete('1.0')
-            typed_widget.config(state=tk.NORMAL)
-            typed_widget.insert('1.0', para[current_word])
-            typed_widget.config(state=tk.DISABLED)
-            if current_word >= len(para):
-                text_widget.config(state=tk.DISABLED)
-                return
+        self.title_label = Label(self.window, text="py-typer", font=("monospace", 66), fg="#ebc934", background="gray25")
+        self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
-# display the paragraph
-text_widget = tk.Text(root, wrap=tk.WORD, height=5, width=40)
-text_widget.insert('1.0', para[0])
-text_widget.config(state=tk.DISABLED)
+        self.untyped_text = Label(self.window, text=text, font=("monospace", 61), background="gray25", fg="gray60")
+        self.untyped_text.place(relx=0.5, rely=0.5, anchor=W)
 
-# Timer
-seconds_left=60
-def update_timer():
-    global seconds_left
+        self.typed_text = Label(self.window, text="", font=("monospace", 61), fg="#ebc934", background="gray25")
+        self.typed_text.place(relx=0.5, rely=0.5, anchor=E)
 
-    if seconds_left > 0:
-        seconds_left -= 1
-        timer_label.config(text=f"Time left: {seconds_left} seconds")
-        root.after(1000, update_timer)
-    else:
-        timer_label.config(text="Time's up!")
+        self.time_label = Label(self.window, text=self.type_time, font=("monospace", 30), fg="#ebc934", background="gray25")
+        self.time_label.place(relx=0.95, rely=0.4, anchor=CENTER)
 
-timer_label = tk.Label(root, text=f"Time left: {seconds_left} seconds",)
-def click():
-    global seconds_left
-    seconds_left = 60
-    update_timer()
+        self.accuracy_label = Label(self.window, text=self.accuracy, font=("monospace", 30), fg="#ebc934", background="gray25")
+        self.accuracy_label.place(relx=0.85, rely=0.4, anchor=CENTER)
 
-# pack stuff
-timer_label.pack()
-#text_label.config(text="Words to type: ").pack()
-text_widget.pack()
-#typed_label.config(text="Next char to type: ").pack()
-typed_widget.pack()
+        self.wpm_label = Label(self.window, text=self.wpm, font=("monospace", 30), fg="#ebc934", background="gray25")
+        self.wpm_label.place(relx=0.7, rely=0.4, anchor=CENTER)
 
-# capture the keys
-root.bind('<KeyPress>', sendKeys)
-root.mainloop()
+        self.cursor_label = Label(self.window, text="||", background="gray25", fg="gray60", font=("roboto", 20), wraplength=1)
+        self.cursor_label.place(relx=0.499, rely=0.51, anchor=CENTER)
 
+        self.calculate_accuracy()
+        self.calculate_wpm()
+        self.border()
+        self.cursor_blinking()
+        
+        self.window.bind('<KeyPress>', self.key_press)
+
+    def restart(self):
+        for widget in self.window.winfo_children():
+            widget.destroy()
+        self.setup()
+
+    def main_menu(self):
+        for widget in self.window.winfo_children():
+            widget.destroy()
+
+        results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 80, "bold"), background="gray25", fg="#ebc934")
+        results_label.place(relx=0.5, rely=0.4, anchor=CENTER)
+
+        restart_button = Button(self.window, text=">", background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
+        restart_button.place(rely=0.6, relx=0.5, anchor=CENTER)
+
+        mode_button = Button(self.window, text="mode", font=("monospace", 60), highlightbackground="gray25", fg="#ebc934", background="gray25")
+        mode_button.place(rely=0.7, relx=0.5, anchor=CENTER)
+
+    def key_press(self,event):
+        if self.spelled <= 1 and self.misspelled <= 1:
+            self.countdown()
+        if not self.write_able:
+            return 
+        if event.char == self.untyped_text.cget('text')[:1]:
+            self.typed_text.configure(text=self.typed_text.cget('text') + event.char)
+            self.untyped_text.configure(text=self.untyped_text.cget('text')[1:])
+            self.spelled += 1
+            if len(self.untyped_text.cget('text')) < 1:
+                self.main_menu()
+        else:
+            self.misspelled += 1
+        self.calculate_accuracy()
+
+    def countdown(self):
+        if self.type_time > 0:
+            self.type_time -= 1
+            try:
+                self.time_label.configure(text=self.type_time)
+            except TclError: pass
+            self.window.after(1000, self.countdown)
+        else:
+            self.write_able = False
+            self.main_menu()
+
+    def calculate_accuracy(self):
+        self.accuracy = str(int((self.spelled / (self.spelled + self.misspelled)) * 100)) + "%"
+        try:
+            self.accuracy_label.configure(text=self.accuracy)
+        except TclError: pass
+
+    def calculate_wpm(self):
+        try:
+            self.wpm = str(int(((((len(self.typed_text.cget('text').split()))) / (self.total_time-self.type_time)) * 100/1.5))) + "WPM"
+            self.wpm_label.configure(text=self.wpm)
+        except TclError:
+            pass
+        self.window.after(1000, self.calculate_wpm)
+
+    def plot_graph(self):
+        pass
+
+    def modes(self):
+        pass
+
+    def border(self):
+        edge_border_left = Label(self.window, wraplength=1, text="h"*420, fg="gray25", background="gray25")
+        edge_border_left.place(rely=0.1)
+        edge_border_right = Label(self.window, wraplength=1, text="__"*420, fg="gray25", background="gray25")
+        edge_border_right.place(rely=0.1, relx=0.99)
+        self.window.after(500, self.border)
+
+    def cursor_blinking(self):
+        if self.cursor_blink:
+            try: self.cursor_label.configure(text="")
+            except TclError: pass 
+            self.cursor_blink = False
+        else:
+            try: self.cursor_label.configure(text="||")
+            except TclError: pass
+            self.cursor_blink = True
+        self.window.after(500, self.cursor_blinking)
+        
+window = Window()
+window.window.mainloop()
