@@ -16,6 +16,8 @@ class Window:
         self.window.configure(background="gray25")
         self.window.geometry("720x480")
         self.window.resizable(False, False)
+        self.image = PhotoImage(file="1600px-HD_transparent_picture.png")
+        self.restarted = False
         self.setup()
 
     def setup(self):
@@ -30,26 +32,23 @@ class Window:
 
         self.type_time = self.total_time - 1
 
-        text = "python is python is python is python is python is python is python is"
-        text_freestyle = ""
-        text_harder = ""
-
-        self.title_label = Label(self.window, text="py-typer", font=("monospace", 66), fg="#ebc934", background="gray25")
+        text = "python is python is python is python is python is python is python is" 
+        self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background="gray25")
         self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
-        self.untyped_text = Label(self.window, text=text, font=("monospace", 61), background="gray25", fg="gray60")
+        self.untyped_text = Label(self.window, text=text, font=("roboto condensed", 61), background="gray25", fg="gray60")
         self.untyped_text.place(relx=0.5, rely=0.5, anchor=W)
 
-        self.typed_text = Label(self.window, text="", font=("monospace", 61), fg="#ebc934", background="gray25")
+        self.typed_text = Label(self.window, text="", font=("roboto condensed", 61), fg="#ebc934", background="gray25")
         self.typed_text.place(relx=0.5, rely=0.5, anchor=E)
 
-        self.time_label = Label(self.window, text=self.type_time, font=("monospace", 30), fg="#ebc934", background="gray25")
+        self.time_label = Label(self.window, text=self.type_time, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
         self.time_label.place(relx=0.95, rely=0.4, anchor=CENTER)
 
-        self.accuracy_label = Label(self.window, text=self.accuracy, font=("monospace", 30), fg="#ebc934", background="gray25")
+        self.accuracy_label = Label(self.window, text=self.accuracy, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
         self.accuracy_label.place(relx=0.85, rely=0.4, anchor=CENTER)
 
-        self.wpm_label = Label(self.window, text=self.wpm, font=("monospace", 30), fg="#ebc934", background="gray25")
+        self.wpm_label = Label(self.window, text=self.wpm, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
         self.wpm_label.place(relx=0.7, rely=0.4, anchor=CENTER)
 
         self.cursor_label = Label(self.window, text="||", background="gray25", fg="gray60", font=("roboto", 20), wraplength=1)
@@ -65,6 +64,7 @@ class Window:
     def restart(self):
         for widget in self.window.winfo_children():
             widget.destroy()
+        self.restarted = True
         self.setup()
 
     def main_menu(self):
@@ -77,12 +77,13 @@ class Window:
         restart_button = Button(self.window, text=">", background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.place(rely=0.6, relx=0.5, anchor=CENTER)
 
-        mode_button = Button(self.window, text="mode", font=("monospace", 60), highlightbackground="gray25", fg="#ebc934", background="gray25")
+        mode_button = Button(self.window, text="mode", font=("roboto", 60), highlightbackground="gray25", fg="#ebc934", background="gray25")
         mode_button.place(rely=0.7, relx=0.5, anchor=CENTER)
 
     def key_press(self,event):
-        if self.spelled <= 1 and self.misspelled <= 1:
-            self.countdown()
+        if not self.restarted :
+            if self.spelled == 1:
+                self.countdown()
         if not self.write_able:
             return 
         if event.char == self.untyped_text.cget('text')[:1]:
@@ -143,6 +144,8 @@ class Window:
             except TclError: pass
             self.cursor_blink = True
         self.window.after(500, self.cursor_blinking)
+
+
         
 window = Window()
 window.window.mainloop()
