@@ -16,7 +16,6 @@ class Window:
         self.window.configure(background="gray25")
         self.window.geometry("720x480")
         self.window.resizable(False, False)
-        self.image = PhotoImage(file="1600px-HD_transparent_picture.png")
         self.restarted = False
         self.setup()
 
