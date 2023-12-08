@@ -76,7 +76,7 @@ class Window:
         restart_button = Button(self.window, text="Restart",font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.place(rely=0.6, relx=0.5, anchor=CENTER)
 
-        mode_button = Button(self.window, text="Mode", font=("roboto", 60), highlightbackground="gray25", fg="#ebc934", background="gray25")
+        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25")
         mode_button.place(rely=0.8, relx=0.5, anchor=CENTER)
 
     def key_press(self,event):
