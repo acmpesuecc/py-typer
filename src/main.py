@@ -73,11 +73,11 @@ class Window:
         results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 80, "bold"), background="gray25", fg="#ebc934")
         results_label.place(relx=0.5, rely=0.4, anchor=CENTER)
 
-        restart_button = Button(self.window, text=">", background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
+        restart_button = Button(self.window, text="Restart",font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.place(rely=0.6, relx=0.5, anchor=CENTER)
 
-        mode_button = Button(self.window, text="mode", font=("roboto", 60), highlightbackground="gray25", fg="#ebc934", background="gray25")
-        mode_button.place(rely=0.7, relx=0.5, anchor=CENTER)
+        mode_button = Button(self.window, text="Mode", font=("roboto", 60), highlightbackground="gray25", fg="#ebc934", background="gray25")
+        mode_button.place(rely=0.8, relx=0.5, anchor=CENTER)
 
     def key_press(self,event):
         if not self.restarted :
