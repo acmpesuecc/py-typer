@@ -19,6 +19,12 @@ Writeup about the speedtyping-test and the problem it tries to solve.
 07. Sounds feedback for keypresses: Nevin
 08. Graph to map out progress: Navneet
 
+## deps:
+
+```
+pip install simpleaudio
+```
+
 ## credits:
 
 [![license: GPLv3 or Later](https://polarhive.net/assets/badges/gpl-3.svg)](https://www.gnu.org/licenses/gpl-3.0.txt)
