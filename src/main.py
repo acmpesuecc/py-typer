@@ -5,9 +5,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
 
+import random
 import threading
 import simpleaudio as sa
 from tkinter import *
+
 def play_sound_async():
     wave_obj = sa.WaveObject.from_wave_file("key.wav")
     play_obj = wave_obj.play()
@@ -31,10 +33,9 @@ class Window:
         self.wpm = 0
         self.time_mode = 40
         self.total_time = self.time_mode + 1
+        self.type_time = self.total_time - 1
         self.write_able = True
         self.cursor_blink = True
-
-        self.type_time = self.total_time - 1
 
         text = "python, cython, jython, pypy, pithon" 
         self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background="gray25")
@@ -119,8 +120,10 @@ class Window:
         except TclError: pass
 
     def calculate_wpm(self):
+        words_typed = len(self.typed_text.cget('text').split())
+        elapsed_time = self.total_time - self.type_time
         try:
-            self.wpm = str(int(((((len(self.typed_text.cget('text').split()))) / (self.total_time-self.type_time)) * 100/1.5))) + "WPM"
+            self.wpm = str(int((words_typed / elapsed_time) * 60)) + " WPM"
             self.wpm_label.configure(text=self.wpm)
         except TclError:
             pass
