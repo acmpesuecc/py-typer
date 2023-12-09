@@ -5,14 +5,16 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
 
+import re
+import time
 import threading
 import simpleaudio as sa
-import time
+import text_module
 from tkinter import *
 from tkinter import ttk
 
 def play_sound_async():
-    wave_obj = sa.WaveObject.from_wave_file("key.wav")
+    wave_obj = sa.WaveObject.from_wave_file("key.wav") # make sure you have this file locally
     play_obj = wave_obj.play()
     play_obj.wait_done()
 
@@ -36,21 +38,19 @@ class Window:
     def choose_wd(self):
         self.clear()
         Button(self.window, text="easy", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(1)).place(rely=0.1, relx=0.5, anchor=CENTER)
-        Button(self.window, text="mid", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(1)).place(rely=0.4, relx=0.5, anchor=CENTER)
+        Button(self.window, text="mid", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(2)).place(rely=0.4, relx=0.5, anchor=CENTER)
         Button(self.window, text="hard", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(3)).place(rely=0.7, relx=0.5, anchor=CENTER)
         Button(self.window, text="freestyle", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(0)).place(rely=0.9, relx=0.5, anchor=CENTER)
 
     def __init__(self):
         self.window = Tk()
         self.window.title('py-typer')
-
         self.window.configure(background="gray25")
         self.window.geometry("720x480")
         self.window.resizable(False, False)
-        self.frame = ttk.Frame(self.window, padding=10)
-        self.frame.grid()
         self.window.grid_columnconfigure((0, 1), weight=1)
         self.window.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.frame = ttk.Frame(self.window, padding=10).grid()
 
         self.time_difficulty = 5 # 5s for now to easily debug WPM and accuracy
         self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
@@ -72,7 +72,11 @@ class Window:
 
         self.type_time = self.total_time - 1
 
-        text = "python is python is python is python is python is python is python is"
+        if self.word_difficulty == 1: text=text_module.easy
+        elif self.word_difficulty == 2: text=text_module.easy
+        elif self.word_difficulty == 3: text=text_module.hard
+        else: text=text_module.freestyle
+
         self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background="gray25")
         self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
