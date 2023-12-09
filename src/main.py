@@ -5,14 +5,19 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
 
+import threading
+import simpleaudio as sa
 from tkinter import *
-import random
-import time
+def play_sound_async():
+    wave_obj = sa.WaveObject.from_wave_file("key.wav")
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
 
 class Window:
 
     def __init__(self):
         self.window = Tk()
+        self.window.title('py-typer')
         self.window.configure(background="gray25")
         self.window.geometry("720x480")
         self.window.resizable(False, False)
@@ -20,18 +25,18 @@ class Window:
         self.setup()
 
     def setup(self):
-
-        self.misspelled = 0
         self.spelled = 1
-        self.total_time = 41
         self.accuracy = 0
+        self.misspelled = 0
         self.wpm = 0
+        self.time_mode = 40
+        self.total_time = self.time_mode + 1
         self.write_able = True
         self.cursor_blink = True
 
         self.type_time = self.total_time - 1
 
-        text = "python is python is python is python is python is python is python is" 
+        text = "python, cython, jython, pypy, pithon" 
         self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background="gray25")
         self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
@@ -80,12 +85,14 @@ class Window:
         mode_button.place(rely=0.8, relx=0.5, anchor=CENTER)
 
     def key_press(self,event):
-        if not self.restarted :
+        if not self.restarted:
             if self.spelled == 1:
                 self.countdown()
         if not self.write_able:
             return 
         if event.char == self.untyped_text.cget('text')[:1]:
+            sound_thread = threading.Thread(target=play_sound_async)
+            sound_thread.start()
             self.typed_text.configure(text=self.typed_text.cget('text') + event.char)
             self.untyped_text.configure(text=self.untyped_text.cget('text')[1:])
             self.spelled += 1
@@ -98,8 +105,7 @@ class Window:
     def countdown(self):
         if self.type_time > 0:
             self.type_time -= 1
-            try:
-                self.time_label.configure(text=self.type_time)
+            try: self.time_label.configure(text=self.type_time)
             except TclError: pass
             self.window.after(1000, self.countdown)
         else:
@@ -144,7 +150,5 @@ class Window:
             self.cursor_blink = True
         self.window.after(500, self.cursor_blinking)
 
-
-        
 window = Window()
 window.window.mainloop()
