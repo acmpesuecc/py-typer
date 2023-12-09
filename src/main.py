@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
 
-import re
 import time
 import threading
 import simpleaudio as sa
@@ -73,7 +72,7 @@ class Window:
         self.type_time = self.total_time - 1
 
         if self.word_difficulty == 1: text=text_module.easy
-        elif self.word_difficulty == 2: text=text_module.easy
+        elif self.word_difficulty == 2: text=text_module.medium
         elif self.word_difficulty == 3: text=text_module.hard
         else: text=text_module.freestyle
 
