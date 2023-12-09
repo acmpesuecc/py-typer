@@ -7,6 +7,7 @@
 
 import threading
 import simpleaudio as sa
+import time
 from tkinter import *
 from tkinter import ttk
 
@@ -16,11 +17,9 @@ def play_sound_async():
     play_obj.wait_done()
 
 class Window:
-
-    def td(self,s):
+    def td(self, s):
         self.clear()
         self.time_difficulty = s
-        self.restarted = True
         self.restart()
 
     def choose_td(self):
@@ -29,10 +28,9 @@ class Window:
         Button(self.window, text="60s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(60)).place(rely=0.5, relx=0.5, anchor=CENTER)
         Button(self.window, text="120s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(120)).place(rely=0.8, relx=0.5, anchor=CENTER)
 
-    def wd(self,m):
+    def wd(self, m):
         self.clear()
         self.word_difficulty = m
-        self.restarted = True
         self.restart()
 
     def choose_wd(self):
@@ -51,12 +49,11 @@ class Window:
         self.window.resizable(False, False)
         self.frame = ttk.Frame(self.window, padding=10)
         self.frame.grid()
-        self.window.grid_columnconfigure((0,1), weight=1)
-        self.window.grid_rowconfigure((0,1, 2, 3, 4), weight=1)
-        self.restarted = False
+        self.window.grid_columnconfigure((0, 1), weight=1)
+        self.window.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
 
-        self.time_difficulty=1
-        self.word_difficulty=1 # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
+        self.time_difficulty = 5 # 5s for now to easily debug WPM and accuracy
+        self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
 
         self.setup()
 
@@ -65,7 +62,6 @@ class Window:
             widget.destroy()
 
     def setup(self):
-
         self.misspelled = 0
         self.spelled = 1
         self.total_time = self.time_difficulty + 1
@@ -76,7 +72,7 @@ class Window:
 
         self.type_time = self.total_time - 1
 
-        text = "python is python is python is python is python is python is python is" 
+        text = "python is python is python is python is python is python is python is"
         self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background="gray25")
         self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
@@ -101,12 +97,11 @@ class Window:
         self.calculate_accuracy()
         self.calculate_wpm()
         self.cursor_blinking()
-        
+
         self.window.bind('<KeyPress>', self.key_press)
 
     def restart(self):
         self.clear()
-        self.restarted = True
         self.setup()
 
     def main_menu(self):
@@ -114,18 +109,17 @@ class Window:
         results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 80, "bold"), background="gray25", fg="#ebc934")
         results_label.place(relx=0.5, rely=0.4, anchor=CENTER)
 
-        restart_button = Button(self.window, text="Restart",font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
+        restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.place(rely=0.6, relx=0.5, anchor=CENTER)
 
         mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="blue", command=self.modes)
         mode_button.place(rely=0.8, relx=0.5, anchor=CENTER)
 
-    def key_press(self,event):
-        if not self.restarted:
-            if self.spelled == 1:
-                self.countdown()
+    def key_press(self, event):
+        if self.spelled == 1:
+            self.start_timer()
         if not self.write_able:
-            return 
+            return None
         if event.char == self.untyped_text.cget('text')[:1]:
             sound_thread = threading.Thread(target=play_sound_async)
             sound_thread.start()
@@ -133,19 +127,27 @@ class Window:
             self.untyped_text.configure(text=self.untyped_text.cget('text')[1:])
             self.spelled += 1
             if len(self.untyped_text.cget('text')) < 1:
+                self.clear()
                 self.main_menu()
         else:
             self.misspelled += 1
         self.calculate_accuracy()
 
-    def countdown(self):
-        if self.type_time > 0:
+    def start_timer(self):
+        self.timer_thread = threading.Thread(target=self.countdown_thread)
+        self.timer_thread.daemon = True
+        self.timer_thread.start()
+
+    def countdown_thread(self):
+        while self.type_time > 0 and self.write_able:
+            time.sleep(1)
             self.type_time -= 1
             try:
                 self.time_label.configure(text=self.type_time)
-            except TclError: pass
-            self.window.after(1000, self.countdown)
-        else:
+            except TclError:
+                pass
+
+        if self.write_able:
             self.write_able = False
             self.main_menu()
 
@@ -153,7 +155,8 @@ class Window:
         self.accuracy = str(int((self.spelled / (self.spelled + self.misspelled)) * 100)) + "%"
         try:
             self.accuracy_label.configure(text=self.accuracy)
-        except TclError: pass
+        except TclError:
+            pass
 
     def calculate_wpm(self):
         try:
@@ -175,14 +178,18 @@ class Window:
 
     def cursor_blinking(self):
         if self.cursor_blink:
-            try: self.cursor_label.configure(text="")
-            except TclError: pass 
+            try:
+                self.cursor_label.configure(text="")
+            except TclError:
+                pass
             self.cursor_blink = False
         else:
-            try: self.cursor_label.configure(text="||")
-            except TclError: pass
+            try:
+                self.cursor_label.configure(text="||")
+            except TclError:
+                pass
             self.cursor_blink = True
         self.window.after(500, self.cursor_blinking)
-        
+
 window = Window()
 window.window.mainloop()
