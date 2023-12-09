@@ -17,8 +17,35 @@ def play_sound_async():
 
 class Window:
 
+    def td(self,s):
+        self.clear()
+        self.time_difficulty = s
+        self.restarted = True
+        self.restart()
+
+    def choose_td(self):
+        self.clear()
+        Button(self.window, text="30s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(30)).place(rely=0.2, relx=0.5, anchor=CENTER)
+        Button(self.window, text="60s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(60)).place(rely=0.5, relx=0.5, anchor=CENTER)
+        Button(self.window, text="120s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(120)).place(rely=0.8, relx=0.5, anchor=CENTER)
+
+    def wd(self,m):
+        self.clear()
+        self.word_difficulty = m
+        self.restarted = True
+        self.restart()
+
+    def choose_wd(self):
+        self.clear()
+        Button(self.window, text="easy", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(1)).place(rely=0.1, relx=0.5, anchor=CENTER)
+        Button(self.window, text="mid", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(1)).place(rely=0.4, relx=0.5, anchor=CENTER)
+        Button(self.window, text="hard", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(3)).place(rely=0.7, relx=0.5, anchor=CENTER)
+        Button(self.window, text="freestyle", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(0)).place(rely=0.9, relx=0.5, anchor=CENTER)
+
     def __init__(self):
         self.window = Tk()
+        self.window.title('py-typer')
+
         self.window.configure(background="gray25")
         self.window.geometry("720x480")
         self.window.resizable(False, False)
@@ -27,13 +54,21 @@ class Window:
         self.window.grid_columnconfigure((0,1), weight=1)
         self.window.grid_rowconfigure((0,1, 2, 3, 4), weight=1)
         self.restarted = False
+
+        self.time_difficulty=1
+        self.word_difficulty=1 # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
+
         self.setup()
+
+    def clear(self):
+        for widget in self.window.winfo_children():
+            widget.destroy()
 
     def setup(self):
 
         self.misspelled = 0
         self.spelled = 1
-        self.total_time = 41
+        self.total_time = self.time_difficulty + 1
         self.accuracy = 0
         self.wpm = 0
         self.write_able = True
@@ -70,26 +105,23 @@ class Window:
         self.window.bind('<KeyPress>', self.key_press)
 
     def restart(self):
-        for widget in self.window.winfo_children():
-            widget.destroy()
+        self.clear()
         self.restarted = True
         self.setup()
 
     def main_menu(self):
-        for widget in self.window.winfo_children():
-            widget.destroy()
-
+        self.clear()
         results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 80, "bold"), background="gray25", fg="#ebc934")
         results_label.place(relx=0.5, rely=0.4, anchor=CENTER)
 
         restart_button = Button(self.window, text="Restart",font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.place(rely=0.6, relx=0.5, anchor=CENTER)
 
-        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="blue")
+        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="blue", command=self.modes)
         mode_button.place(rely=0.8, relx=0.5, anchor=CENTER)
 
     def key_press(self,event):
-        if not self.restarted :
+        if not self.restarted:
             if self.spelled == 1:
                 self.countdown()
         if not self.write_able:
@@ -137,7 +169,9 @@ class Window:
         pass
 
     def modes(self):
-        pass
+        self.clear()
+        Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_td).place(rely=0.2, relx=0.5, anchor=CENTER)
+        Button(self.window, text="Word Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_wd).place(rely=0.5, relx=0.5, anchor=CENTER)
 
     def cursor_blinking(self):
         if self.cursor_blink:
