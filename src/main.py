@@ -8,6 +8,7 @@
 import time
 import threading
 import simpleaudio as sa
+import matplotlib.pyplot as plt 
 import text_module
 from tkinter import *
 from tkinter import ttk
@@ -53,6 +54,8 @@ class Window:
 
         self.time_difficulty = 5 # 5s for now to easily debug WPM and accuracy
         self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
+        self.x=[]
+        self.y=[]
 
         self.setup()
 
@@ -107,6 +110,15 @@ class Window:
         self.clear()
         self.setup()
 
+    def plot_graph(self):
+        plt.plot(self.x, self.y)
+        plt.xlabel('Time')
+        plt.ylabel('WPM')
+        plt.title('Typing Performance')
+        plt.show()
+        self.x=[]
+        self.y=[]
+
     def main_menu(self):
         self.clear()
         results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 80, "bold"), background="gray25", fg="#ebc934")
@@ -117,6 +129,8 @@ class Window:
 
         mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="blue", command=self.modes)
         mode_button.place(rely=0.8, relx=0.5, anchor=CENTER)
+
+        self.plot_graph()
 
     def key_press(self, event):
         if self.spelled == 1:
@@ -167,13 +181,12 @@ class Window:
             elapsed_time = self.total_time - self.type_time
             self.wpm = str(int((words_typed / elapsed_time) * 60)) + " WPM"
             self.wpm_label.configure(text=self.wpm)
+            self.x.append(elapsed_time)
+            self.y.append(self.wpm)
         except TclError:
             pass
         self.window.after(1000, self.calculate_wpm)
-
-    def plot_graph(self):
-        pass
-
+ 
     def modes(self):
         self.clear()
         Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_td).place(rely=0.2, relx=0.5, anchor=CENTER)
