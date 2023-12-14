@@ -181,10 +181,11 @@ class Window:
         try:
             words_typed = len(self.typed_text.cget('text').split())
             elapsed_time = self.total_time - self.type_time
-            self.wpm = str(int((words_typed / elapsed_time) * 60)) + " WPM"
+            self.wpm = int((words_typed / elapsed_time) * 60) 
+            self.y.append(self.wpm)
+            self.wpm = str(self.wpm) + " WPM"
             self.wpm_label.configure(text=self.wpm)
             self.x.append(elapsed_time)
-            self.y.append(self.wpm)
         except TclError:
             pass
         self.window.after(1000, self.calculate_wpm)
