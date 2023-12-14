@@ -25,7 +25,7 @@ hard = random.choice(hard_d)
 
 freestyle_words = [
     random.choice(re.findall(r'\b\w+\b', passage))
-    for passage in [easy, medium, hard]
+    for passage in [easy, medium]
     for _ in range(30)
 ]
 freestyle = ' '.join(freestyle_words)
