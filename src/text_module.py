@@ -1,8 +1,31 @@
 import re
 import random
 
-easy = """python is python is"""
-medium = """My name is Walter Hartwell White. I live at 308 Negra Aroya Lane, Albuquerque, New Mexico, 87104."""
-hard = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderi"""
+easy_d = [
+    "the quick brown fox jumps over the lazy dog",
+    "a stitch in time saves nine",
+    "actions speak louder than words"
+]
 
-freestyle = ' '.join(random.choice(re.findall(r'\b\w+\b', medium)) for _ in range(10))
+medium_d = [
+    "My name is Walter Hartwell White. I live at 308 Negra Aroya Lane, Albuquerque, New Mexico, 87104.",
+    "Life is either a daring adventure or nothing at all",
+    "You miss 100 percent of the shots you don’t take"
+]
+
+hard_d = [
+    # lorem ipsum text
+    "liqu3t urn@ nec libero fermentum, in interdum justo convallis. Mauris vite purus m3lu, ultrice$ metu$ id, con$eqat0 odio.",
+    "cras ultrices tincidunt erat, eget vehicula lectus molestie id. In hac habitasse platea dictumst. Sed gravida tristique justo.",
+]
+
+easy = random.choice(easy_d)
+medium = random.choice(medium_d)
+hard = random.choice(hard_d)
+
+freestyle_words = [
+    random.choice(re.findall(r'\b\w+\b', passage))
+    for passage in [easy, medium, hard]
+    for _ in range(30)
+]
+freestyle = ' '.join(freestyle_words)

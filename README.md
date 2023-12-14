@@ -6,7 +6,8 @@
 
 ## problem statement:
 
-Writeup about the speedtyping-test and the problem it tries to solve.
+Creating a typing test tool that measures users typing speed and accuracy,
+providing an entertaining way to improve keyboard skills.
 
 ## features:
 
@@ -36,6 +37,6 @@ Licensed under the GPLv3.0
 
 PES2UG23CS368 Nathan Matthew Paul
 PES2UG23CS371 Navneet Nayak
-PES2UG23CS3XX Nevin Mathew Thomas
+PES2UG23CS381 Nevin Mathew Thomas
 PES2UG23CS390 Nilay Srivastava
 ```

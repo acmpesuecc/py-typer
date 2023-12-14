@@ -1,6 +1,7 @@
+# Creating a typing test tool that measures users typing speed and accuracy, providing an entertaining way to improve keyboard skills.
 # author: PES2UG23CS368 Nathan Matthew Paul
 # author: PES2UG23CS371 Navneet Nayak
-# author: PES2UG23CS3XX Nevin Mathew Thomas
+# author: PES2UG23CS381 Nevin Mathew Thomas
 # author: PES2UG23CS390 Nilay Srivastava
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2023
@@ -52,7 +53,7 @@ class Window:
         self.window.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
         self.frame = ttk.Frame(self.window, padding=10).grid()
 
-        self.time_difficulty = 5 # 5s for now to easily debug WPM and accuracy
+        self.time_difficulty = 30 # 30s for now to easily debug WPM and accuracy
         self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
         self.x=[]
         self.y=[]
@@ -111,6 +112,7 @@ class Window:
         self.setup()
 
     def plot_graph(self):
+        plt.clf()
         plt.plot(self.x, self.y)
         plt.xlabel('Time')
         plt.ylabel('WPM')
