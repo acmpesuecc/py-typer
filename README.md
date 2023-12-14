@@ -23,6 +23,7 @@ Writeup about the speedtyping-test and the problem it tries to solve.
 
 ```
 pip install simpleaudio
+pip install matplotlib
 ```
 
 ## credits:
