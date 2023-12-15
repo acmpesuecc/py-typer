@@ -48,7 +48,7 @@ class Window:
         self.window.title('py-typer')
         self.window.configure(background="gray25")
         self.window.geometry("720x480")
-        self.window.resizable(False, False)
+        # self.window.resizable(False, False)
         self.window.grid_columnconfigure((0, 1), weight=1)
         self.window.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
         self.frame = ttk.Frame(self.window, padding=10).grid()

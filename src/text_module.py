@@ -10,7 +10,7 @@ easy_d = [
 medium_d = [
     "My name is Walter Hartwell White. I live at 308 Negra Aroya Lane, Albuquerque, New Mexico, 87104.",
     "Life is either a daring adventure or nothing at all",
-    "You miss 100 percent of the shots you don’t take"
+    "You miss 100 percent of the shots you dont take"
 ]
 
 hard_d = [
