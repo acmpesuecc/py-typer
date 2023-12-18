@@ -54,14 +54,14 @@ class Window:
         self.window = Tk()
         self.window.title('py-typer')
         self.window.configure(background="gray25")
-        self.window.geometry("720x500")
+        self.window.geometry("900x500")
         self.window.resizable(False, False)
         self.frame = ttk.Frame(self.window, padding=10).grid()
 
         self.restarted = False
 
         self.window.grid_columnconfigure((0, 1), weight=1)
-        self.window.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.window.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
         self.graph = True
         self.time_difficulty = 30 # 30s for now to easily debug WPM and accuracy
@@ -152,7 +152,7 @@ class Window:
         restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.grid(row=2, column=0)
 
-        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="blue", command=self.modes)
+        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="gray25", command=self.modes)
         mode_button.grid(row=2, column=2)
 
         self.plot_graph()
