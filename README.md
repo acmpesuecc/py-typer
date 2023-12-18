@@ -23,8 +23,9 @@ providing an entertaining way to improve keyboard skills.
 ## deps:
 
 ```
-pip install simpleaudio
-pip install matplotlib
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## credits:
