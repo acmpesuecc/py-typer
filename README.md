@@ -9,6 +9,8 @@
 Creating a typing test tool that measures users typing speed and accuracy,
 providing an entertaining way to improve keyboard skills.
 
+[![demo](/docs/demo.gif)](/docs/demo.mp4)
+
 ## features:
 
 01. WPM: Nilay
