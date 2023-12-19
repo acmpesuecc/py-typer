@@ -9,19 +9,15 @@
 import time
 import threading
 import simpleaudio as sa
-import matplotlib.pyplot as plt 
 import text_module
 from tkinter import *
 from tkinter import ttk
 from matplotlib.figure import Figure 
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,  NavigationToolbar2Tk) 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
 
 def play_sound_async():
-    try:
-        wave_obj = sa.WaveObject.from_wave_file("key.wav") # make sure you have this file locally
-        play_obj = wave_obj.play()
-        play_obj.wait_done()
-    except: pass
+    try: sa.WaveObject.from_wave_file("key.wav").play().wait_done()
+    except: sa.WaveObject.from_wave_file("src/key.wav").play().wait_done()
 
 class Window:
     def td(self, s):
