@@ -8,16 +8,11 @@
 
 import time
 import threading
-import simpleaudio as sa
 import text_module
 from tkinter import *
 from tkinter import ttk
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
-
-def play_sound_async():
-    try: sa.WaveObject.from_wave_file("key.wav").play().wait_done()
-    except: sa.WaveObject.from_wave_file("src/key.wav").play().wait_done()
 
 class Window:
     def td(self, s):
@@ -162,10 +157,6 @@ class Window:
             self.start_timer()
         try:
             if event.char == self.untyped_text.cget('text')[:1]:
-                try:
-                    sound_thread = threading.Thread(target=play_sound_async)
-                    sound_thread.start()
-                except: pass
                 self.typed_text.configure(text=self.typed_text.cget('text') + event.char)
                 self.untyped_text.configure(text=self.untyped_text.cget('text')[1:])
                 self.spelled += 1
