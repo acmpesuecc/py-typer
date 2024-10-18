@@ -19,6 +19,8 @@ hard_d = [
     "cras ultrices tincidunt erat, eget vehicula lectus molestie id. In hac habitasse platea dictumst. Sed gravida tristique justo.",
 ]
 
+freestyle_d = ["This is freestyle mode; type whatever comes to your mind."]
+
 easy = random.choice(easy_d)
 medium = random.choice(medium_d)
 hard = random.choice(hard_d)
