@@ -15,20 +15,22 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
 
 class Color:
-    theme = ""
     @classmethod
-    def theme1(cls, color):
-        return color
+    def theme1(cls):
+        theme = ["yellow", "blue"]
+        return theme
     @classmethod
-    def theme2(cls, color):
-        return color
+    def theme2(cls):
+        theme = ["grey", "gold"]
+        return theme
 
 
 class Window:
 
     def __init__(self):
-        self.color1 = Color.theme1("yellow")
-        self.color2 = Color.theme2("blue")
+        self.theme1 = Color.theme1()
+        self.theme2 = Color.theme2()
+        
         self.stop_threads = False
 
         self.window = Tk()
@@ -47,7 +49,17 @@ class Window:
         self.time_difficulty = 30 # 30s for now to easily debug WPM and accuracy
         self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
 
-        self.setup()
+        self.color1 = self.theme1[0]  #default themes colors for the starting case
+        self.color2 = self.theme1[1]
+
+        self.choose_theme()
+
+    def choose_theme(self):
+        self.clear()
+        Button(self.window, text="Theme 1", font=("roboto", 30), highlightbackground=self.theme1[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme1)).place(rely=0.3, relx=0.3, anchor=CENTER)
+        Button(self.window, text="Theme 2", font=("roboto", 30), highlightbackground=self.theme2[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.7, relx=0.3, anchor=CENTER)
+
+
     def td(self, s):
         self.clear()
         self.time_difficulty = s
@@ -58,7 +70,16 @@ class Window:
         Button(self.window, text="30s", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.td(30)).place(rely=0.5, relx=0.2, anchor=CENTER)
         Button(self.window, text="60s", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background="gray25", command=lambda: self.td(60)).place(rely=0.5, relx=0.5, anchor=CENTER)
         Button(self.window, text="120s", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.td(120)).place(rely=0.5, relx=0.8, anchor=CENTER)
+        Button(self.window, text="theme1", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme1)).place(rely=0.5, relx=0.8, anchor=CENTER)
+        Button(self.window, text="theme2", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.5, relx=0.8, anchor=CENTER)
 
+
+    def theme(self, theme):
+        self.color1 = theme[0]  
+        self.color2 = theme[1] 
+        self.window.configure(background=self.color2)
+        self.setup()
+        
     def wd(self, m):
         self.clear()
         self.stop_threads = True
@@ -67,7 +88,7 @@ class Window:
 
     def choose_wd(self):
         self.clear()
-        Button(self.window, text="easy", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color2, command=lambda: self.wd(1)).place(rely=0.4, relx=0.2, anchor=CENTER)
+        Button(self.window, text="easy", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.theme2[0], command=lambda: self.wd(1)).place(rely=0.4, relx=0.2, anchor=CENTER)
         Button(self.window, text="medium", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background=self.color1, command=lambda: self.wd(2)).place(rely=0.4, relx=0.5, anchor=CENTER)
         Button(self.window, text="hard", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color2, command=lambda: self.wd(3)).place(rely=0.4, relx=0.8, anchor=CENTER)
         Button(self.window, text="freestyle", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background=self.color2, command=lambda: self.wd(0)).place(rely=0.6, relx=0.5, anchor=CENTER)
