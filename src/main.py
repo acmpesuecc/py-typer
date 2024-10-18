@@ -18,17 +18,36 @@ class Color:
     theme = ""
     @classmethod
     def theme1(cls, color):
-        theme = "light yellow"
-        return theme
+        return color
     @classmethod
     def theme2(cls, color):
-        theme = "sky blue"
-        return theme
+        return color
 
 
 class Window:
-    color1 = Color.theme1
-    color2 = Color.theme2
+
+    def __init__(self):
+        self.color1 = Color.theme1("yellow")
+        self.color2 = Color.theme2("blue")
+        self.stop_threads = False
+
+        self.window = Tk()
+        self.window.title('py-typer')
+        self.window.configure(background="gray25")
+        self.window.geometry("900x500")
+        self.window.resizable(False, False)
+        self.frame = ttk.Frame(self.window, padding=10).grid()
+
+        self.restarted = False
+
+        self.window.grid_columnconfigure((0, 1), weight=1)
+        self.window.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
+
+        self.graph = True
+        self.time_difficulty = 30 # 30s for now to easily debug WPM and accuracy
+        self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
+
+        self.setup()
     def td(self, s):
         self.clear()
         self.time_difficulty = s
@@ -52,27 +71,6 @@ class Window:
         Button(self.window, text="medium", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background=self.color1, command=lambda: self.wd(2)).place(rely=0.4, relx=0.5, anchor=CENTER)
         Button(self.window, text="hard", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color2, command=lambda: self.wd(3)).place(rely=0.4, relx=0.8, anchor=CENTER)
         Button(self.window, text="freestyle", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background=self.color2, command=lambda: self.wd(0)).place(rely=0.6, relx=0.5, anchor=CENTER)
-
-    def __init__(self):
-        self.stop_threads = False
-
-        self.window = Tk()
-        self.window.title('py-typer')
-        self.window.configure(background="gray25")
-        self.window.geometry("900x500")
-        self.window.resizable(False, False)
-        self.frame = ttk.Frame(self.window, padding=10).grid()
-
-        self.restarted = False
-
-        self.window.grid_columnconfigure((0, 1), weight=1)
-        self.window.grid_rowconfigure((0, 1, 2, 3, 4, 5), weight=1)
-
-        self.graph = True
-        self.time_difficulty = 30 # 30s for now to easily debug WPM and accuracy
-        self.word_difficulty = 1  # 1: means easy, 2: means hard, 3: means difficult, 0: means freestyle mode
-
-        self.setup()
 
     def clear(self):
         for widget in self.window.winfo_children():
