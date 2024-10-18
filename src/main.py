@@ -11,6 +11,7 @@ import threading
 import text_module
 from tkinter import *
 from tkinter import ttk
+from tkinter import simpledialog, messagebox
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
 
@@ -26,7 +27,6 @@ class Color:
 
 
 class Window:
-
     def __init__(self):
         self.theme1 = Color.theme1()
         self.theme2 = Color.theme2()
@@ -57,9 +57,19 @@ class Window:
     def choose_theme(self):
         self.clear()
         Button(self.window, text="Theme 1", font=("roboto", 30), highlightbackground=self.theme1[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme1)).place(rely=0.3, relx=0.3, anchor=CENTER)
-        Button(self.window, text="Theme 2", font=("roboto", 30), highlightbackground=self.theme2[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.7, relx=0.3, anchor=CENTER)
-    
+        Button(self.window, text="Theme 2", font=("roboto", 30), highlightbackground=self.theme2[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.55, relx=0.3, anchor=CENTER)
+        Button(self.window, text="Add own theme", font=("roboto", 30), highlightbackground=self.theme2[0], fg="#ebc934", background="gray25", command=lambda: self.own_theme()).place(rely=0.8, relx=0.3, anchor=CENTER)
 
+
+    def own_theme(self):
+        bg_color = simpledialog.askstring("Input", "Enter Background Color (name):", parent=self.window)
+        fg_color = simpledialog.askstring("Input", "Enter Foreground Color (name):", parent=self.window)
+
+        if bg_color and fg_color:
+            self.theme_ = [bg_color, fg_color] 
+            self.theme(self.theme_) 
+        else:
+            messagebox.showerror("Error", "Both colors are needed")
 
     def td(self, s):
         self.clear()
