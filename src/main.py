@@ -55,9 +55,10 @@ class Window:
         self.choose_theme()
 
     def choose_theme(self):
-        #self.clear()
+        self.clear()
         Button(self.window, text="Theme 1", font=("roboto", 30), highlightbackground=self.theme1[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme1)).place(rely=0.3, relx=0.3, anchor=CENTER)
         Button(self.window, text="Theme 2", font=("roboto", 30), highlightbackground=self.theme2[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.7, relx=0.3, anchor=CENTER)
+    
 
 
     def td(self, s):
@@ -75,6 +76,7 @@ class Window:
         self.color1 = theme[0]  
         self.color2 = theme[1] 
         self.window.configure(background=self.color2)
+        self.clear()  #ensures that user is stuck to the theme chosen by them during that period
         self.setup()
         
     def wd(self, m):
