@@ -13,6 +13,12 @@ from tkinter import *
 from tkinter import ttk
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
+from pygame import mixer
+     
+mixer.init()
+mixer.music.load("sounds\keyboardclick.mp3")
+
+should_play = True
 
 class Window:
     def td(self, s):
@@ -60,7 +66,7 @@ class Window:
 
         self.setup()
 
-    def clear(self):
+    def clear(self):       
         for widget in self.window.winfo_children():
             widget.destroy()
         
@@ -118,6 +124,8 @@ class Window:
         self.setup()
 
     def plot_graph(self):
+        self.mixer_uninit()
+        
         self.fig = Figure(figsize = (3, 2), dpi = 100) 
         self.fig.clf()
         plot1 = self.fig.add_subplot() 
@@ -136,6 +144,7 @@ class Window:
 
     def main_menu(self):
         self.clear()
+        self.mixer_uninit()
 
         results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 50, "bold"), background="gray25", fg="#ebc934")
         results_label.grid(row=1, column=0)
@@ -149,6 +158,8 @@ class Window:
         self.plot_graph()
 
     def key_press(self, event):
+        self.play_sound()
+        
         if not self.write_able:
             return None
         if event.keysym == "Shift_L" or event.keysym == "Shift_R":
@@ -168,6 +179,14 @@ class Window:
                 self.misspelled += 1
             self.calculate_accuracy()
         except TclError: pass
+
+    def mixer_uninit(self):
+        mixer.quit()
+        should_play = False
+
+    def play_sound(self):
+        if(should_play):
+            mixer.music.play()
 
     def start_timer(self):
         self.timer_thread = threading.Thread(target=self.countdown_thread)
