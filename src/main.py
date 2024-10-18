@@ -126,7 +126,7 @@ class Window:
         elif self.word_difficulty == 3: text=text_module.hard
         else: text=text_module.freestyle
 
-        self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background=self.color1)
+        self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background=self.color2)
         self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
         self.untyped_text = Label(self.window, text=text, font=("roboto condensed", 61), background=self.color2, fg="gray60")
