@@ -55,7 +55,7 @@ class Window:
         self.choose_theme()
 
     def choose_theme(self):
-        self.clear()
+        #self.clear()
         Button(self.window, text="Theme 1", font=("roboto", 30), highlightbackground=self.theme1[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme1)).place(rely=0.3, relx=0.3, anchor=CENTER)
         Button(self.window, text="Theme 2", font=("roboto", 30), highlightbackground=self.theme2[0], fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.7, relx=0.3, anchor=CENTER)
 
@@ -70,9 +70,6 @@ class Window:
         Button(self.window, text="30s", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.td(30)).place(rely=0.5, relx=0.2, anchor=CENTER)
         Button(self.window, text="60s", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background="gray25", command=lambda: self.td(60)).place(rely=0.5, relx=0.5, anchor=CENTER)
         Button(self.window, text="120s", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.td(120)).place(rely=0.5, relx=0.8, anchor=CENTER)
-        Button(self.window, text="theme1", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme1)).place(rely=0.5, relx=0.8, anchor=CENTER)
-        Button(self.window, text="theme2", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.theme(self.theme2)).place(rely=0.5, relx=0.8, anchor=CENTER)
-
 
     def theme(self, theme):
         self.color1 = theme[0]  
@@ -149,6 +146,7 @@ class Window:
         self.stop_threads = False
         self.clear()
         self.setup()
+        self.choose_theme()  #so that the buttons appear later on after refreshing too 
 
     def plot_graph(self):
         self.fig = Figure(figsize = (3, 2), dpi = 100) 
