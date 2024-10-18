@@ -136,8 +136,7 @@ class Window:
 
     def main_menu(self):
         self.clear()
-
-        results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 50, "bold"), background="gray25", fg="#ebc934")
+        results_label = Label(self.window, text=str(self.wpm) + " WPM  " + str(self.accuracy) + "% Accuracy", font=("roboto", 50, "bold"), background="gray25", fg="#ebc934")
         results_label.grid(row=1, column=0)
 
         restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
@@ -190,6 +189,80 @@ class Window:
             self.stop_threads = True
             self.main_menu()
 
+    def difficult_mode_zen(self):
+        self.clear()
+        self.word_difficulty = 3  # Assuming word difficulty is set to hard or you can set custom logic
+        self.write_able = True
+        self.start_time = time.time()
+        self.stop_threads = False
+        self.setup_zen_mode()
+
+    def setup_zen_mode(self):
+        self.x = []
+        self.y = []
+
+        self.misspelled = 0
+        self.spelled = 0
+        self.accuracy = 0
+        self.wpm = 0
+        self.write_able = True
+
+        if self.word_difficulty == 3: 
+            text = text_module.hard  # Example text source
+        else: 
+            text = text_module.freestyle  # Freestyle or hard mode, adjust as needed
+
+        self.untyped_text = Label(self.window, text=text, font=("roboto condensed", 61), background="gray25", fg="gray60")
+        self.untyped_text.place(relx=0.5, rely=0.5, anchor=W)
+
+        self.typed_text = Label(self.window, text="", font=("roboto condensed", 61), fg="#ebc934", background="gray25")
+        self.typed_text.place(relx=0.5, rely=0.5, anchor=E)
+
+        self.accuracy_label = Label(self.window, text=self.accuracy, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.accuracy_label.grid(row=1, column=3, sticky=S)
+
+        self.wpm_label = Label(self.window, text=self.wpm, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.wpm_label.grid(row=1, column=4, sticky=S)
+
+        self.cursor_label = Label(self.window, text="||", background="gray25", fg="gray60", font=("roboto", 20), wraplength=1)
+        self.cursor_label.place(relx=0.499, rely=0.51, anchor=CENTER)
+
+        self.cursor_blinking()
+
+        self.window.bind('<KeyPress>', self.key_press_zen)
+
+    def key_press_zen(self, event):
+        if not self.write_able:
+            return None
+        if event.keysym == "Shift_L" or event.keysym == "Shift_R":
+            return None
+        if event.keysym == "Return" and event.state & 0x0001:  # Shift + Enter detection
+            self.write_able = False
+            self.calculate_final_wpm()
+            self.main_menu()
+            return
+        try:
+            if event.char == self.untyped_text.cget('text')[:1]:
+                self.typed_text.configure(text=self.typed_text.cget('text') + event.char)
+                self.untyped_text.configure(text=self.untyped_text.cget('text')[1:])
+                self.spelled += 1
+                if len(self.untyped_text.cget('text')) < 1:
+                    self.clear()
+                    self.main_menu()
+            else:
+                self.misspelled += 1
+            self.calculate_accuracy()
+        except TclError:
+            pass
+
+    def calculate_final_wpm(self):
+        end_time = time.time()
+        elapsed_time = end_time - self.start_time
+        words_typed = len(self.typed_text.cget('text').split())
+        self.wpm = int((words_typed / elapsed_time) * 60)
+        self.wpm_label.configure(text=str(self.wpm) + " WPM")
+        self.calculate_accuracy() 
+
     def calculate_accuracy(self):
         self.accuracy = str(int((self.spelled / (self.spelled + self.misspelled)) * 100)) + "%"
         try:
@@ -209,11 +282,13 @@ class Window:
         except TclError:
             pass
         self.window.after(1000, self.calculate_wpm)
+
  
     def modes(self):
         self.clear()
         Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_td).place(rely=0.4, relx=0.5, anchor=CENTER)
         Button(self.window, text="Word Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_wd).place(rely=0.6, relx=0.5, anchor=CENTER)
+        Button(self.window, text="Difficult Mode Zen", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.difficult_mode_zen).place(rely=0.7, relx=0.5, anchor=CENTER)
 
     def cursor_blinking(self):
         if self.cursor_blink:
