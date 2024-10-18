@@ -135,18 +135,25 @@ class Window:
         canvas.get_tk_widget().grid(row=1, column=2)
 
     def main_menu(self):
-        self.clear()
+        self.window.after(100, self.display_results)
 
+    def display_results(self):
+        self.clear()  # Clear the window
+
+    # Create and display the results label
         results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 50, "bold"), background="gray25", fg="#ebc934")
         results_label.grid(row=1, column=0)
 
+    # Create and display the restart button
         restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.grid(row=2, column=0)
 
+    # Create and display the mode button
         mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="gray25", command=self.modes)
         mode_button.grid(row=2, column=2)
 
-        self.plot_graph()
+    # Plot the graph
+        self.plot_graph()    
 
     def key_press(self, event):
         if not self.write_able:
