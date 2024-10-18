@@ -14,11 +14,15 @@ from tkinter import ttk
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
 from pygame import mixer
-     
-mixer.init()
-mixer.music.load("sounds\keyboardclick.mp3")
+import os
+
+sounds = [os.path.abspath("sounds\keyboardclick1") + ".mp3", os.path.abspath("sounds\keyboardclick2") + ".wav", os.path.abspath("sounds\keyboardclick3") + ".wav"]
 
 should_play = True
+soundID = 0
+
+mixer.init()
+mixer.music.load(sounds[soundID])
 
 class Window:
     def td(self, s):
@@ -48,6 +52,8 @@ class Window:
     def __init__(self):
         self.stop_threads = False
 
+        self.soundID = soundID
+
         self.window = Tk()
         self.window.title('py-typer')
         self.window.configure(background="gray25")
@@ -71,6 +77,7 @@ class Window:
             widget.destroy()
         
     def setup(self):
+        self.mixer_init()
 
         self.x=[]
         self.y=[]
@@ -122,6 +129,7 @@ class Window:
         self.stop_threads = False
         self.clear()
         self.setup()
+        self.mixer_init()
 
     def plot_graph(self):
         self.mixer_uninit()
@@ -151,7 +159,10 @@ class Window:
 
         restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.grid(row=2, column=0)
-
+   
+        change_sound_button = Button(self.window, text="Sound", font=("roboto", 30), background="gray25", command=self.change_sound, highlightbackground="gray25", fg="#ebc934")
+        change_sound_button.grid(row=2, column=1)
+        
         mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="gray25", command=self.modes)
         mode_button.grid(row=2, column=2)
 
@@ -180,10 +191,30 @@ class Window:
             self.calculate_accuracy()
         except TclError: pass
 
+
     def mixer_uninit(self):
         mixer.quit()
         should_play = False
 
+    def mixer_init(self):
+        mixer.init()
+        mixer.music.load(sounds[self.soundID])
+        should_play = True
+        
+    def change_sound(self):
+        if(self.soundID == len(sounds) - 1):
+            self.soundID = 0
+        else:
+            self.soundID += 1
+        
+        print(self.soundID)
+        
+        mixer.init()
+        mixer.music.load(sounds[self.soundID])
+
+        self.play_sound()
+        
+        
     def play_sound(self):
         if(should_play):
             mixer.music.play()
