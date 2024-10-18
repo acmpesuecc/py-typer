@@ -15,8 +15,14 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
 from pygame import mixer
 import os
+import platform
 
-sounds = [os.path.abspath("sounds\keyboardclick1") + ".mp3", os.path.abspath("sounds\keyboardclick2") + ".wav", os.path.abspath("sounds\keyboardclick3") + ".wav"]
+if(platform.system() == "Darwin"):
+    sounds = [os.path.abspath("sounds/keyboardclick1") + ".mp3", os.path.abspath("sounds/keyboardclick2") + ".wav", os.path.abspath("sounds/keyboardclick3") + ".wav"]
+elif(platform.system() == "Windows"):
+    sounds = [os.path.abspath("sounds\keyboardclick1") + ".mp3", os.path.abspath("sounds\keyboardclick2") + ".wav", os.path.abspath("sounds\keyboardclick3") + ".wav"]
+else:
+    sounds = [os.path.abspath("sounds\keyboardclick1") + ".mp3", os.path.abspath("sounds\keyboardclick2") + ".wav", os.path.abspath("sounds\keyboardclick3") + ".wav"]
 
 should_play = True
 soundID = 0
