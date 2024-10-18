@@ -13,6 +13,9 @@ from tkinter import *
 from tkinter import ttk
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
+import pygame
+pygame.init()
+pygame.mixer.init()
 
 class Window:
     def td(self, s):
@@ -41,13 +44,15 @@ class Window:
 
     def __init__(self):
         self.stop_threads = False
-
+        self.se=pygame.mixer.Sound('docs/defaultclk.wav')
+        self.se.set_volume(1.0)
         self.window = Tk()
         self.window.title('py-typer')
         self.window.configure(background="gray25")
         self.window.geometry("900x500")
         self.window.resizable(False, False)
         self.frame = ttk.Frame(self.window, padding=10).grid()
+        self.options = ["docs/defaultclk", "docs/", "docs/", "docs/"]
 
         self.restarted = False
 
@@ -133,7 +138,19 @@ class Window:
         canvas = FigureCanvasTkAgg(self.fig, master = self.window)   
         canvas.draw()
         canvas.get_tk_widget().grid(row=1, column=2)
-
+        
+    def set_se(self):
+        selected_sound=self.combo_se.get()
+        if selected_sound=="Sound 1":
+            self.se=pygame.mixer.Sound('docs/sound1.wav')
+        elif selected_sound=="Sound 2":
+            self.se=pygame.mixer.Sound('docs/sound2.wav')
+        elif selected_sound=="Sound 3":
+            self.se=pygame.mixer.Sound('docs/sound3.wav')
+        else:
+            self.se=pygame.mixer.Sound('docs/defaultclk.wav')
+        
+    
     def main_menu(self):
         self.clear()
 
@@ -157,6 +174,8 @@ class Window:
             self.start_timer()
         try:
             if event.char == self.untyped_text.cget('text')[:1]:
+                self.se.stop()
+                self.se.play()
                 self.typed_text.configure(text=self.typed_text.cget('text') + event.char)
                 self.untyped_text.configure(text=self.untyped_text.cget('text')[1:])
                 self.spelled += 1
@@ -214,6 +233,14 @@ class Window:
         self.clear()
         Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_td).place(rely=0.4, relx=0.5, anchor=CENTER)
         Button(self.window, text="Word Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_wd).place(rely=0.6, relx=0.5, anchor=CENTER)
+        sound_options = ["Default", "Sound 1", "Sound 2", "Sound 3"]
+        se_label = Label(self.window, text="Choose Sound Effect", font=("roboto", 20), fg="#ebc934", background="gray25")
+        se_label.place(rely=0.75, relx=0.3, anchor=CENTER)
+
+        self.combo_se = ttk.Combobox(self.window, values=sound_options, font=("roboto", 16), state="readonly")
+        self.combo_se.set("Default")
+        self.combo_se.place(rely=0.75, relx=0.6, anchor=CENTER)
+        self.combo_se.bind("<<ComboboxSelected>>", lambda event: self.set_se())
 
     def cursor_blinking(self):
         if self.cursor_blink:
