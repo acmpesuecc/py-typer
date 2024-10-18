@@ -1,11 +1,3 @@
-# Creating a typing test tool that measures users typing speed and accuracy, providing an entertaining way to improve keyboard skills.
-# author: PES2UG23CS368 Nathan Matthew Paul
-# author: PES2UG23CS371 Navneet Nayak
-# author: PES2UG23CS381 Nevin Mathew Thomas
-# author: PES2UG23CS390 Nilay Srivastava
-# SPDX-License-Identifier: GPL-3.0-or-later
-# Copyright (C) 2023
-
 import time
 import threading
 import text_module
@@ -143,10 +135,57 @@ class Window:
         restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
         restart_button.grid(row=2, column=0)
 
+        zen_button = Button(self.window, text="Zen Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.zen_mode)
+        zen_button.grid(row=2, column=1)
+
         mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="gray25", command=self.modes)
         mode_button.grid(row=2, column=2)
 
         self.plot_graph()
+
+    def zen_mode(self):
+        self.clear()  # Clear previous UI elements
+
+        self.write_able = True
+        self.spelled = 0
+        self.misspelled = 0
+        self.time_label = Label(self.window, text="Zen Mode: Type!", font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.time_label.place(relx=0.5, rely=0.2, anchor=CENTER)
+
+        # Create a text entry area for the user
+        self.typed_text = Label(self.window, text="", font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.typed_text.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        # Initialize WPM tracking
+        self.x = []  # Reset the x data for plotting
+        self.y = []  # Reset the y data for plotting
+        self.start_time = time.time()  # Start time for WPM calculation
+        self.window.bind('<KeyPress>', self.zen_key_press)  
+        # Bind Shift + Enter to exit Zen Mode
+        self.window.bind('<Shift-Return>', self.exit_zen_mode)  
+        self.window.after(1000, self.calculate_zen_wpm)  # Start calculating WPM after 1 second
+
+    def calculate_zen_wpm(self):
+        if self.write_able:
+            elapsed_time = time.time() - self.start_time  # Calculate elapsed time
+            words_typed = len(self.typed_text.cget('text').split())
+            wpm = int((words_typed / elapsed_time) * 60) if elapsed_time > 0 else 0
+
+            self.x.append(elapsed_time)  # Append elapsed time to x
+            self.y.append(wpm)  # Append WPM to y
+
+            self.window.after(1000, self.calculate_zen_wpm)  # Recalculate every second
+
+    def zen_key_press(self, event):
+        if self.write_able and event.char:  # Check if a character was pressed
+            self.typed_text.configure(text=self.typed_text.cget('text') + event.char)
+            self.spelled += 1  # Increment spelled words (if necessary)
+
+    def exit_zen_mode(self, event):
+        self.write_able = False  # Stop writing
+        self.main_menu()  # Go back to the main menu or wherever you want to go
+        self.plot_graph()  # Call the graph plotting function
+
 
     def key_press(self, event):
         if not self.write_able:
@@ -168,6 +207,8 @@ class Window:
                 self.misspelled += 1
             self.calculate_accuracy()
         except TclError: pass
+
+
 
     def start_timer(self):
         self.timer_thread = threading.Thread(target=self.countdown_thread)
@@ -209,11 +250,18 @@ class Window:
         except TclError:
             pass
         self.window.after(1000, self.calculate_wpm)
+
+    def end_zen_mode(self, event):
+        self.write_able = False  # Disable typing
+        self.stop_threads = True  # Stop any running threads
+        self.plot_graph()  # Plot graph of WPM vs time after exiting Zen Mode
+        self.main_menu()  # Go back to the main menu
  
     def modes(self):
         self.clear()
         Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_td).place(rely=0.4, relx=0.5, anchor=CENTER)
         Button(self.window, text="Word Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_wd).place(rely=0.6, relx=0.5, anchor=CENTER)
+        Button(self.window, text="Zen Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.start_zen_mode).place(rely=0.8, relx=0.5, anchor=CENTER)
 
     def cursor_blinking(self):
         if self.cursor_blink:
