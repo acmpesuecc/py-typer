@@ -14,7 +14,21 @@ from tkinter import ttk
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg) 
 
+class Color:
+    theme = ""
+    @classmethod
+    def theme1(cls, color):
+        theme = "light yellow"
+        return theme
+    @classmethod
+    def theme2(cls, color):
+        theme = "sky blue"
+        return theme
+
+
 class Window:
+    color1 = Color.theme1
+    color2 = Color.theme2
     def td(self, s):
         self.clear()
         self.time_difficulty = s
@@ -22,9 +36,9 @@ class Window:
 
     def choose_td(self):
         self.clear()
-        Button(self.window, text="30s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(30)).place(rely=0.5, relx=0.2, anchor=CENTER)
-        Button(self.window, text="60s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(60)).place(rely=0.5, relx=0.5, anchor=CENTER)
-        Button(self.window, text="120s", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.td(120)).place(rely=0.5, relx=0.8, anchor=CENTER)
+        Button(self.window, text="30s", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.td(30)).place(rely=0.5, relx=0.2, anchor=CENTER)
+        Button(self.window, text="60s", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background="gray25", command=lambda: self.td(60)).place(rely=0.5, relx=0.5, anchor=CENTER)
+        Button(self.window, text="120s", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background="gray25", command=lambda: self.td(120)).place(rely=0.5, relx=0.8, anchor=CENTER)
 
     def wd(self, m):
         self.clear()
@@ -34,10 +48,10 @@ class Window:
 
     def choose_wd(self):
         self.clear()
-        Button(self.window, text="easy", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(1)).place(rely=0.4, relx=0.2, anchor=CENTER)
-        Button(self.window, text="medium", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(2)).place(rely=0.4, relx=0.5, anchor=CENTER)
-        Button(self.window, text="hard", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(3)).place(rely=0.4, relx=0.8, anchor=CENTER)
-        Button(self.window, text="freestyle", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=lambda: self.wd(0)).place(rely=0.6, relx=0.5, anchor=CENTER)
+        Button(self.window, text="easy", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color2, command=lambda: self.wd(1)).place(rely=0.4, relx=0.2, anchor=CENTER)
+        Button(self.window, text="medium", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background=self.color1, command=lambda: self.wd(2)).place(rely=0.4, relx=0.5, anchor=CENTER)
+        Button(self.window, text="hard", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color2, command=lambda: self.wd(3)).place(rely=0.4, relx=0.8, anchor=CENTER)
+        Button(self.window, text="freestyle", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background=self.color2, command=lambda: self.wd(0)).place(rely=0.6, relx=0.5, anchor=CENTER)
 
     def __init__(self):
         self.stop_threads = False
@@ -84,25 +98,25 @@ class Window:
         elif self.word_difficulty == 3: text=text_module.hard
         else: text=text_module.freestyle
 
-        self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background="gray25")
+        self.title_label = Label(self.window, text="py-typer", font=("roboto condensed", 66), fg="#ebc934", background=self.color1)
         self.title_label.place(rely=0.05, relx=0.01, anchor=W)
 
-        self.untyped_text = Label(self.window, text=text, font=("roboto condensed", 61), background="gray25", fg="gray60")
+        self.untyped_text = Label(self.window, text=text, font=("roboto condensed", 61), background=self.color2, fg="gray60")
         self.untyped_text.place(relx=0.5, rely=0.5, anchor=W)
 
-        self.typed_text = Label(self.window, text="", font=("roboto condensed", 61), fg="#ebc934", background="gray25")
+        self.typed_text = Label(self.window, text="", font=("roboto condensed", 61), fg="#ebc934", background=self.color2)
         self.typed_text.place(relx=0.5, rely=0.5, anchor=E)
 
-        self.time_label = Label(self.window, text=self.type_time, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.time_label = Label(self.window, text=self.type_time, font=("roboto condensed", 30), fg="#ebc934", background=self.color2)
         self.time_label.grid(row=1, column=2, sticky=S)
 
-        self.accuracy_label = Label(self.window, text=self.accuracy, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.accuracy_label = Label(self.window, text=self.accuracy, font=("roboto condensed", 30), fg="#ebc934", background=self.color1)
         self.accuracy_label.grid(row=1, column=3, sticky=S)
 
-        self.wpm_label = Label(self.window, text=self.wpm, font=("roboto condensed", 30), fg="#ebc934", background="gray25")
+        self.wpm_label = Label(self.window, text=self.wpm, font=("roboto condensed", 30), fg="#ebc934", background=self.color1)
         self.wpm_label.grid(row=1, column=4, sticky=S)
 
-        self.cursor_label = Label(self.window, text="||", background="gray25", fg="gray60", font=("roboto", 20), wraplength=1)
+        self.cursor_label = Label(self.window, text="||", background=self.color2, fg=self.color1, font=("roboto", 20), wraplength=1)
         self.cursor_label.place(relx=0.499, rely=0.51, anchor=CENTER)
 
         self.calculate_accuracy()
@@ -137,13 +151,13 @@ class Window:
     def main_menu(self):
         self.clear()
 
-        results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 50, "bold"), background="gray25", fg="#ebc934")
+        results_label = Label(self.window, text=self.wpm + "  " + self.accuracy, font=("roboto", 50, "bold"), background=self.color1, fg="#ebc934")
         results_label.grid(row=1, column=0)
 
-        restart_button = Button(self.window, text="Restart", font=("roboto", 30), background="gray25", command=self.restart, highlightbackground="gray25", fg="#ebc934")
+        restart_button = Button(self.window, text="Restart", font=("roboto", 30), background=self.color1, command=self.restart, highlightbackground=self.color2, fg="#ebc934")
         restart_button.grid(row=2, column=0)
 
-        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", bg="gray25", command=self.modes)
+        mode_button = Button(self.window, text="Mode", font=("roboto", 30), highlightbackground=self.color2, fg="#ebc934", background="gray25", bg=self.color1, command=self.modes)
         mode_button.grid(row=2, column=2)
 
         self.plot_graph()
@@ -212,8 +226,8 @@ class Window:
  
     def modes(self):
         self.clear()
-        Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_td).place(rely=0.4, relx=0.5, anchor=CENTER)
-        Button(self.window, text="Word Difficulty", font=("roboto", 30), highlightbackground="gray25", fg="#ebc934", background="gray25", command=self.choose_wd).place(rely=0.6, relx=0.5, anchor=CENTER)
+        Button(self.window, text="Time Difficulty", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color1, command=self.choose_td).place(rely=0.4, relx=0.5, anchor=CENTER)
+        Button(self.window, text="Word Difficulty", font=("roboto", 30), highlightbackground=self.color1, fg="#ebc934", background=self.color2, command=self.choose_wd).place(rely=0.6, relx=0.5, anchor=CENTER)
 
     def cursor_blinking(self):
         if self.cursor_blink:
